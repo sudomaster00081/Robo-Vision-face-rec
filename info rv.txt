@@ -1,0 +1,5 @@
+
+
+pip install virtualenvwrapper-win
+mkvirtualenv rv
+pip install pillow 
