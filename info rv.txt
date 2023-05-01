@@ -2,4 +2,14 @@
 
 pip install virtualenvwrapper-win
 mkvirtualenv rv
+
+pip install numpy
 pip install pillow 
+pip install opencv-python
+pip install face
+pip install opencv-contrib-python
+
+python face_dataset.py
+python training.py
+python facerecognition.py
+
