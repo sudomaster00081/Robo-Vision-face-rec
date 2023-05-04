@@ -26,4 +26,5 @@ python face_dataset.py
 python training.py
 python facerecognition.py
 
+Organized all to Haarcascade folder
 Beginning From The Course ......
