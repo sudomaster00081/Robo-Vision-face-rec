@@ -28,3 +28,30 @@ python facerecognition.py
 
 Organized all to Haarcascade folder 😄
 Beginning From The Course ...... 
+
+pip install dlib
+
+pip install face-recognition
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
