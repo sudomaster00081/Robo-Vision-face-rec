@@ -28,48 +28,45 @@ class MpDetector:
         return True, image[start_point[1]:end_point[1], start_point[0]:end_point[0]]
 
 
-def generate_embedding(croped_image, bgr=False):
+def generate_embedding(cropped_image, bgr=False):
     if bgr:
-        croped_image = croped_image[:, :, ::-1]
-    height, width, _ = croped_image.shape
-    return face_recognition.face_encodings(croped_image, known_face_locations=[(0, width, height, 0)])[0]
+        cropped_image = cropped_image[:, :, ::-1]
+    height, width, _ = cropped_image.shape
+    return face_recognition.face_encodings(cropped_image, known_face_locations=[(0, width, height, 0)])[0]
 
 
 def capture_known_faces() -> List[np.ndarray]:
-    
     known_face_embeddings = []
     detector = MpDetector()
     i = 0
-    for filename in os.listdir('images'):
-        print(f'loading Face {i}')
-        image = cv2.imread(os.path.join('images', filename))
-        face_detection_status, face_crop = detector.detect(image, True)
-        if face_detection_status:
-            cv2.imshow(f"Person {i+1}", face_crop)
-            #cv2.waitKey(0)
-            emb = generate_embedding(np.array(face_crop))
-            known_face_embeddings.append(emb)
-            print(f'DONE loading Face {i}')
+    for person_dir in os.listdir('images'):
+        person_path = os.path.join('images', person_dir)
+        if not os.path.isdir(person_path):
+            continue
+        print(f'Loading images for person {i}')
+        person_embeddings = []
+        for filename in os.listdir(person_path):
+            image_path = os.path.join(person_path, filename)
+            image = cv2.imread(image_path)
+            face_detection_status, face_crop = detector.detect(image, True)
+            if face_detection_status:
+                cv2.imshow(f"Person {i+1}", face_crop)
+                emb = generate_embedding(np.array(face_crop))
+                person_embeddings.append(emb)
+        if person_embeddings:
+            known_face_embeddings.append(person_embeddings)
+            print(f'Done loading images for person {i}')
             i += 1
-
-            #input("Press Enter to continue...")
-
     cv2.destroyAllWindows()
     return known_face_embeddings
 
 
 def main():
     known_face_embeddings = capture_known_faces()
-    
-    #print(known_face_embeddings)
-    np.save("face_embeddings.npy", known_face_embeddings)
-    # cap = cv2.VideoCapture(0)
-    
-    # cap.release()
-    # cv2.destroyAllWindows()
+    np.save("face_embeddings edited.npy", known_face_embeddings)
 
 
 if __name__ == "__main__":
     main()
 
-print("\nSUCCESSFULL 🤣")
+print("\nSUCCESSFUL 🤣")
