@@ -4,6 +4,15 @@ import mediapipe as mp
 import cv2
 import numpy as np
 import os
+from collections import Counter
+
+####LOADINGSCREEN
+from tqdm import tqdm
+
+
+
+
+# person_names = []
 
 class MpDetector:
     def __init__(self):
@@ -51,15 +60,38 @@ def identify_faces(known_face_embeddings, known_face_names, image):
         min_distance = face_distances[min_distance_index]
         if min_distance < 0.4:
             # Face recognized as a known person
-            return True, min_distance_index, start_x, start_y
+            return True, known_face_names[min_distance_index], start_x, start_y
         else:
             # Unknown face
-            print ("Unknown")
-            return False, None, None, None
+            # print ("Unknown")
+            unk = "Unknown"
+            return True, unk, None, None
     else:
         # No face detected
-        print("Noface")
+        print("Noface" , end = "r")
         return False, None, None, None
+
+#COUNT PART
+def find_largest_repeating(names):
+    counts = Counter(names)
+    max_name, max_count = counts.most_common(1)[0]
+    
+    if max_name == 'Unknown' and max_count == 20:
+        print ("\nUNKNOWN PERSON\n")
+    
+    # Check if the highest count is greater than 15
+    if max_count > 15:
+        accuracyrate = max_count * 5
+        print(f"\n\nPerson Identified as : '{max_name}' With Accuracy {accuracyrate} %.\n")
+    else:
+        print("\n\nPerson Unidentified-----\n")
+
+
+
+
+
+
+
 
 
 def main():
@@ -67,18 +99,22 @@ def main():
     cap = cv2.VideoCapture(0)
 
     prev_x, prev_y = None, None
-    
-    while True:
+    person_names = []
+    i = 0 
+    while i < 20:
         ret, frame = cap.read()
         if not ret:
             break
 
-        face_recognition_status, person_index, start_x, start_y = identify_faces(
+        face_recognition_status, person_name, start_x, start_y = identify_faces(
             known_face_embeddings, known_face_names, frame)
 
         if face_recognition_status:
             # Known person recognized
-            print("Person identified:", known_face_names[person_index])
+            #print("Person identified:", person_name )
+            person_names.append(person_name)
+            i = i + 1
+            # print(i)
             # You can perform further actions here, such as displaying the person's name, etc.
 
         prev_x, prev_y = start_x, start_y
@@ -86,12 +122,16 @@ def main():
         cv2.imshow("Face Recognition", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
+        print(f"Recognizing....: {i*5} %", end="\r")
+        
+        
+    find_largest_repeating(person_names)
+        
     cap.release()
     cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
     main()
-
+# print(person_names)
 print("\nSUCCESSFUL 🤣")
