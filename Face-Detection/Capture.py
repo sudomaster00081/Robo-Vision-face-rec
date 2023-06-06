@@ -1,5 +1,6 @@
 import os
 import cv2
+import dlib
 
 
 def create_person_directory(person_name):
@@ -9,9 +10,15 @@ def create_person_directory(person_name):
     return directory
 
 
+def detect_face(frame):
+    detector = dlib.get_frontal_face_detector()
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    faces = detector(gray)
+    return len(faces) > 0
+
+
 def capture_images(directory):
     cap = cv2.VideoCapture(0)
-    detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
     count = 0
     while count < 50:
@@ -19,17 +26,15 @@ def capture_images(directory):
         if not ret:
             break
 
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        faces = detector.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(30, 30))
+        cv2.imshow("Captured Image", frame)
 
-        if len(faces) > 0:
-            for (x, y, w, h) in faces:
-                face_img = frame[y:y+h, x:x+w]
-                cv2.imshow("Captured Image", face_img)
-
-                filename = os.path.join(directory, f"image{count+1}.jpg")
-                cv2.imwrite(filename, face_img)
-                count += 1
+        if detect_face(frame):
+            filename = os.path.join(directory, f"image{count+1}.jpg")
+            cv2.imwrite(filename, frame)
+            count += 1
+            print(f"Taking Image {count+1}\r" )
+        else:
+            print("waiting For Person.......\n")
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
