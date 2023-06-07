@@ -6,10 +6,20 @@ import numpy as np
 import os
 from collections import Counter
 
+
+
 ####LOADINGSCREEN
 from tqdm import tqdm
+import pyttsx3
 
 
+#TEXT TO SPEECH
+def text_to_speech(text):
+    engine = pyttsx3.init()
+    engine.setProperty('rate', 140)  # Speed of speech
+    engine.setProperty('volume', 0.8)  # Volume level (0.0 to 1.0)
+    engine.say(text)
+    engine.runAndWait()
 
 
 # person_names = []
@@ -78,14 +88,16 @@ def find_largest_repeating(names):
     
     if max_name == 'Unknown' and max_count == 20:
         print ("\nUNKNOWN PERSON\n")
-    
+        text_to_speech("UNKNOWN PERSON")
     # Check if the highest count is greater than 15
-    if max_count > 15:
+    if max_count > 15 and max_name != 'Unknown':
         accuracyrate = max_count * 5
         print(f"\n\nPerson Identified as : '{max_name}' With Accuracy {accuracyrate} %.\n")
+        text_to_speech(f"Person Identified as :{max_name} With Accuracy {accuracyrate} Percentage")
     else:
-        print("\n\nPerson Unidentified-----\n")
-
+        print("\n\nPerson Unidentified-----Please Come Closer :\n")
+        text_to_speech("Person Unidentified-----Please Come Closer :")
+        main1()
 
 
 
