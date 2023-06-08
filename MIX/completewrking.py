@@ -94,6 +94,7 @@ def find_largest_repeating(names):
         accuracyrate = max_count * 5
         print(f"\n\nPerson Identified as : '{max_name}' With Accuracy {accuracyrate} %.\n")
         text_to_speech(f"Person Identified as :{max_name} With Accuracy {accuracyrate} Percentage")
+        exit()
     else:
         print("\n\nPerson Unidentified-----Please Come Closer :\n")
         text_to_speech("Person Unidentified-----Please Come Closer :")
