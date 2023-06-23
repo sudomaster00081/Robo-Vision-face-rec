@@ -87,8 +87,9 @@ def find_largest_repeating(names):
     max_name, max_count = counts.most_common(1)[0]
     
     if max_name == 'Unknown' and max_count == 20:
-        print ("\nUNKNOWN PERSON\n")
+        print ("\nUNKNOWN PERSON Welcome\n")
         text_to_speech("UNKNOWN PERSON")
+        exit()
     # Check if the highest count is greater than 15
     if max_count > 15 and max_name != 'Unknown':
         accuracyrate = max_count * 5
