@@ -111,8 +111,9 @@ def main():
                     # Check if the person is looking
                     if ear > 0.2:  # Adjust the threshold as needed
                         print("Person Detected\nInitiating.......")
-                        completewrking.main1()
-                        main()
+                        person_name = completewrking.main1()
+                        # main()
+                        print(person_name)
                         exit()
 
         # Detect entering and leaving events

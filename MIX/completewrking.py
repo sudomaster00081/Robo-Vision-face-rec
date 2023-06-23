@@ -94,7 +94,8 @@ def find_largest_repeating(names):
         accuracyrate = max_count * 5
         print(f"\n\nPerson Identified as : '{max_name}' With Accuracy {accuracyrate} %.\n")
         text_to_speech(f"Person Identified as :{max_name} With Accuracy {accuracyrate} Percentage")
-        exit()
+        return (max_name)
+        # exit()
     else:
         print("\n\nPerson Unidentified-----Please Come Closer :\n")
         text_to_speech("Person Unidentified-----Please Come Closer :")
@@ -138,10 +139,11 @@ def main1():
         print(f"Recognizing....: {i*5} %", end="\r")
         
         
-    find_largest_repeating(person_names)
+    person = find_largest_repeating(person_names)
         
     cap.release()
     cv2.destroyAllWindows()
+    return person
 
 
 if __name__ == "__main__":
